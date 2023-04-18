@@ -10,9 +10,9 @@ router = APIRouter(
 )
 
 #get all users
-@router.get("/", response_model=List[schemas.User])
+@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.User])
 def get_users(db: Session = Depends(get_db),  current_user : int = Depends(oauth2.get_current_user)):
-    users = crud.get_users(db)
+    users = crud.get_all_users(db)
     return users
 
 #get one user by id
@@ -44,8 +44,10 @@ def create_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
     return new_user
 
 #delete a user by its id
-@router.delete("/{id}", status_code = status.HTTP_204_NO_CONTENT)
+@router.delete("users/{id}", status_code = status.HTTP_204_NO_CONTENT)
 def delete_user_by_id(id: int, db: Session = Depends(get_db), current_user : int = Depends(oauth2.get_current_user)):
+    if current_user != 'admin' :
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You cannot perform this action")
     user = crud.get_users_by_id(id, db)
     if user.first() == None :
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail= f"User with id: {id} does not exist.")
