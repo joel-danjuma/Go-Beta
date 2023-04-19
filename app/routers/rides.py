@@ -31,14 +31,18 @@ def get_ride_by_id(id: int, db: Session = Depends(get_db)):
 
 # create a new ride
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Ride)
-def create_ride(ride: schemas.CreateRide, db: Session = Depends(get_db)):
+def create_ride(
+    ride: schemas.CreateRide,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_provider),
+):
     db_ride = crud.get_ride_by_id(ride.id, db)
     if db_ride:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The ride already exists",
         )
-    new_ride = crud.create_ride(ride, db)
+    new_ride = crud.create_ride(ride, current_user, db)
     return new_ride
 
 

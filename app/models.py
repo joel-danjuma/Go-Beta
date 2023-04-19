@@ -67,7 +67,7 @@ class Ride(Base):
     __tablename__ = "rides"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    vehicle = Column(String, nullable=False)
+    vehicle_type = Column(String, nullable=False)
     available_seats = Column(String, nullable=False)
     provider_id = Column(
         Integer, ForeignKey("providers.id", ondelete="CASCADE"), nullable=False
@@ -76,6 +76,9 @@ class Ride(Base):
     destination = Column(String, nullable=False)
     depature_time = Column(TIMESTAMP(timezone=True), nullable=False)
     arrival_time = Column(TIMESTAMP(timezone=True), nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
 
 class SharedRide(Base):

@@ -61,11 +61,27 @@ class UserLogin(BaseModel):
 # RIDES
 class Ride(BaseModel):
     id: int
-    going_to: str
-    coming_from: str
+    origin: str
+    destination: str
+    vehicle_type: str
+    avaialble_seats: int
+    provider_id: int
+    depature_time: datetime
+    arrival_time: datetime
+    created_at: datetime
 
     class Config:
         orm_mode = True
+
+
+class CreateRide(BaseModel):
+    origin: str
+    destination: str
+    vehicle_type: str
+    avaialble_seats: int
+    provider_id: int
+    depature_time: datetime
+    arrival_time: datetime
 
 
 # PROVIDERS
@@ -92,13 +108,24 @@ class CreateProvider(ProviderBase):
 
 
 # BOOKINGS
+class Booking(BaseModel):
+    id: int
+    owner_id: int
+    ride_id: int
+    reserved_seats: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
 class Booking_res(BaseModel):
     id: int
     owner_id: int
     ride_id: int
 
 
-class CreateBooking(BaseModel):
+class Book_ride(BaseModel):
     ride_id: int
     reserved_seats: int
 

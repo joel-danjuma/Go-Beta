@@ -83,6 +83,14 @@ def get_admin_by_email(email: str, db: Session):
 
 
 # BOOKINGS
+def create_booking(booking: schemas.Booking, user_id: int, db: Session):
+    new_booking = models.Booking(owner_id=user_id, **booking.dict())
+    db.add(new_booking)
+    db.commit()
+    db.refresh(new_booking)
+    return new_booking
+
+
 def get_all_bookings(db: Session):
     return db.query(models.Booking).all()
 
@@ -100,5 +108,25 @@ def get_booking_by_user(user_id: int, db: Session):
 
 
 # RIDES
+def create_ride(ride: schemas.CreateRide, provider_id: int, db: Session):
+    new_ride = models.Ride(provider_id=provider_id, **ride.dict())
+    db.add(new_ride)
+    db.commit()
+    db.refresh(new_ride)
+    return new_ride
+
+
+def get_all_rides(db: Session):
+    return db.query(models.Ride).all()
+
+
 def get_ride_by_id(ride_id: int, db: Session):
     return db.query(models.Ride).filter(models.Ride.id == ride_id)
+
+
+def get_ride_by_user_id(user_id: int, db: Session):
+    return db.query(models.Ride).filter(models.Ride.owner_id == user_id)
+
+
+def get_ride_by_provider_id(provider_id: int, db: Session):
+    return db.query(models.Ride).filter(models.Ride.provider_id == provider_id)
