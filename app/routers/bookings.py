@@ -65,7 +65,11 @@ def get_bookings_by_user_id(
 
 @router.post("/ride", status_code=status.HTTP_201_CREATED)
 def book_ride(
-    ride: schemas.Ride, booking: schemas.Book_ride, db: Session = Depends(get_db)
+    ride: schemas.Ride,
+    booking: schemas.CreateBooking,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(oauth2.get_current_user),
+    response_model=schemas.Booking,
 ):
     ride = crud.get_ride_by_provider_id(ride.provider_id, db).first()
     if ride is None:
@@ -76,35 +80,5 @@ def book_ride(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Not enough available seats"
         )
-    new_booking = models.Booking(**booking.dict())
-    db.add(new_booking)
-    db.commit()
-    db.refresh(new_booking)
-    return new_booking
-
-
-@router.post("/")
-def create_booking(
-    booking: schemas.CreateBooking,
-    db: Session = Depends(get_db),
-    current_user: int = Depends(oauth2.get_current_user),
-):
-    ride = crud.get_ride_by_id(booking.ride_id, db).first()
-    if ride is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Ride not found"
-        )
-    if booking.reserved_seats > ride.available_seats:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Not enough available seats"
-        )
     new_booking = crud.create_booking(booking, current_user, db)
-    # Get the provider of the ride
-    provider = ride.provider
-    if provider is None:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Ride provider not found",
-        )
-    # Send the booking information to the provider's service
-    utils.send_booking_to_provider(provider, new_booking)
+    return new_booking

@@ -119,13 +119,8 @@ class Booking(BaseModel):
         orm_mode = True
 
 
-class Booking_res(BaseModel):
-    id: int
+class CreateBooking(BaseModel):
     owner_id: int
-    ride_id: int
-
-
-class Book_ride(BaseModel):
     ride_id: int
     reserved_seats: int
 

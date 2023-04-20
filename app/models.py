@@ -19,19 +19,19 @@ class User(Base):
     )
 
 
-class Companies(Base):
-    __tablename__ = "companies"
+# class Companies(Base):
+#     __tablename__ = "companies"
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    company_name = Column(String, nullable=False)
-    email = Column(String, nullable=False, unique=True)
-    password = Column(String, nullable=False)
-    contact_person = Column(String, nullable=False)
-    telephone = Column(Integer, nullable=False)
-    address = Column(String, nullable=False)
-    created_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
-    )
+#     id = Column(Integer, primary_key=True, nullable=False)
+#     company_name = Column(String, nullable=False)
+#     email = Column(String, nullable=False, unique=True)
+#     password = Column(String, nullable=False)
+#     contact_person = Column(String, nullable=False)
+#     telephone = Column(Integer, nullable=False)
+#     address = Column(String, nullable=False)
+#     created_at = Column(
+#         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+#     )
 
 
 class Provider(Base):
@@ -48,19 +48,19 @@ class Provider(Base):
     )
 
 
-class Bus(Base):
-    __tablename__ = "buses"
+# class Bus(Base):
+#     __tablename__ = "buses"
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    owner_id = Column(
-        Integer, ForeignKey("providers.id", ondelete="CASCADE"), nullable=False
-    )
-    model = Column(String, nullable=False)
-    capacity = Column(Integer, nullable=False)
-    is_available = Column(Boolean, server_default="TRUE", nullable=False)
-    created_at = Column(
-        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
-    )
+#     id = Column(Integer, primary_key=True, nullable=False)
+#     owner_id = Column(
+#         Integer, ForeignKey("providers.id", ondelete="CASCADE"), nullable=False
+#     )
+#     model = Column(String, nullable=False)
+#     capacity = Column(Integer, nullable=False)
+#     is_available = Column(Boolean, server_default="TRUE", nullable=False)
+#     created_at = Column(
+#         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+#     )
 
 
 class Ride(Base):
@@ -81,17 +81,17 @@ class Ride(Base):
     )
 
 
-class SharedRide(Base):
-    __tablename__ = "shared_rides"
+# class SharedRide(Base):
+#     __tablename__ = "shared_rides"
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    provider_id = Column(
-        Integer, ForeignKey("providers.id", ondelete="CASCADE"), nullable=False
-    )
-    origin = Column(String, nullable=False)
-    destination = Column(String, nullable=False)
-    depature_time = Column(TIMESTAMP(timezone=True), nullable=False)
-    arrival_time = Column(TIMESTAMP(timezone=True), nullable=False)
+#     id = Column(Integer, primary_key=True, nullable=False)
+#     provider_id = Column(
+#         Integer, ForeignKey("providers.id", ondelete="CASCADE"), nullable=False
+#     )
+#     origin = Column(String, nullable=False)
+#     destination = Column(String, nullable=False)
+#     depature_time = Column(TIMESTAMP(timezone=True), nullable=False)
+#     arrival_time = Column(TIMESTAMP(timezone=True), nullable=False)
 
 
 class Booking(Base):
