@@ -74,8 +74,10 @@ class Ride(Base):
     )
     origin = Column(String, nullable=False)
     destination = Column(String, nullable=False)
-    depature_time = Column(TIMESTAMP(timezone=True), nullable=False)
-    arrival_time = Column(TIMESTAMP(timezone=True), nullable=False)
+    # depature_time = Column(TIMESTAMP(timezone=True), nullable=False)
+    # arrival_time = Column(TIMESTAMP(timezone=True), nullable=False)
+    depature_time = Column(String, nullable=False)
+    arrival_time = Column(String, nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
     )
@@ -105,6 +107,9 @@ class Booking(Base):
         Integer, ForeignKey("rides.id", ondelete="CASCADE"), nullable=False
     )
     reserved_seats = Column(Integer, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("now()")
+    )
 
 
 class Review(Base):

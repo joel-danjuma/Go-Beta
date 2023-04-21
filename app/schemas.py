@@ -41,6 +41,8 @@ class User(BaseModel):
 
 
 class CreateUser(UserBase):
+    email: EmailStr
+    password: str
     phone: str
     name: str
 
@@ -64,10 +66,10 @@ class Ride(BaseModel):
     origin: str
     destination: str
     vehicle_type: str
-    avaialble_seats: int
+    available_seats: int
     provider_id: int
-    depature_time: datetime
-    arrival_time: datetime
+    depature_time: str
+    arrival_time: str
     created_at: datetime
 
     class Config:
@@ -78,10 +80,10 @@ class CreateRide(BaseModel):
     origin: str
     destination: str
     vehicle_type: str
-    avaialble_seats: int
-    provider_id: int
-    depature_time: datetime
-    arrival_time: datetime
+    available_seats: int
+    # provider_id: int
+    depature_time: str
+    arrival_time: str
 
 
 # PROVIDERS
@@ -120,7 +122,6 @@ class Booking(BaseModel):
 
 
 class CreateBooking(BaseModel):
-    owner_id: int
     ride_id: int
     reserved_seats: int
 

@@ -108,8 +108,8 @@ def get_booking_by_user(user_id: int, db: Session):
 
 
 # RIDES
-def create_ride(ride: schemas.CreateRide, provider_id: int, db: Session):
-    new_ride = models.Ride(provider_id=provider_id, **ride.dict())
+def create_ride(ride: schemas.CreateRide, id: int, db: Session):
+    new_ride = models.Ride(provider_id=id, **ride.dict())
     db.add(new_ride)
     db.commit()
     db.refresh(new_ride)
@@ -122,10 +122,6 @@ def get_all_rides(db: Session):
 
 def get_ride_by_id(ride_id: int, db: Session):
     return db.query(models.Ride).filter(models.Ride.id == ride_id)
-
-
-def get_ride_by_user_id(user_id: int, db: Session):
-    return db.query(models.Ride).filter(models.Ride.owner_id == user_id)
 
 
 def get_ride_by_provider_id(provider_id: int, db: Session):

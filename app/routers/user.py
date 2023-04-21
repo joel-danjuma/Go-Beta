@@ -53,10 +53,12 @@ def get_users_id_by_email(email: str, db: Session = Depends(get_db)):
 
 
 # create a new user
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.User)
+@router.post(
+    "/sign-up", status_code=status.HTTP_201_CREATED, response_model=schemas.User
+)
 def create_user(user: schemas.CreateUser, db: Session = Depends(get_db)):
     user.password = utils.hash(user.password)
-    db_user = crud.get_users_by_email(user.email, db)
+    db_user = crud.get_users_by_email(user.email, db).first()
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="The user already exists"

@@ -36,7 +36,7 @@ def create_ride(
     db: Session = Depends(get_db),
     current_user: int = Depends(oauth2.get_current_provider),
 ):
-    db_ride = crud.get_ride_by_id(ride.id, db)
+    db_ride = crud.get_ride_by_provider_id(current_user, db).first()
     if db_ride:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
