@@ -129,6 +129,11 @@ def get_all_rides(db: Session):
 def get_ride_by_id(ride_id: int, db: Session):
     return db.query(models.Ride).filter(models.Ride.id == ride_id)
 
+def get_ride_by_origin(origin: str, db: Session):
+    return db.query(models.Ride).filter(models.Ride.origin == origin)
+
+def get_ride_by_destination(destination: str, db: Session):
+    return db.query(models.Ride).filter(models.Ride.destination == destination).all()
 
 def get_ride_by_provider_id(provider_id: int, db: Session):
     return db.query(models.Ride).filter(models.Ride.provider_id == provider_id).all()

@@ -13,7 +13,7 @@ Install the dependencies:
 pip install -r requirements.txt
 
 Run the server:
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 The server should now be running at `http://localhost:8000`.
 
 ## API Endpoints

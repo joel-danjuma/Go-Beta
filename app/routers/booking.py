@@ -22,13 +22,13 @@ def get_booking_by_id(
     db: Session = Depends(get_db),
     current_user: int = Depends(oauth2.get_current_user),
 ):
-    booking = crud.get_booking_by_id(id, db)
-    if booking.first() == None:
+    booking = crud.get_booking_by_id(id, db).first()
+    if booking == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Booking with id: {id} does not exist.",
         )
-    return booking.first()
+    return booking
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -37,8 +37,8 @@ def delete_booking_by_id(
     db: Session = Depends(get_db),
     current_user: int = Depends(oauth2.get_current_user),
 ):
-    booking = crud.get_booking_by_id(id, db)
-    if booking.first() == None:
+    booking = crud.get_booking_by_id(id, db).first()
+    if booking == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Booking with id: {id} does not exist.",
@@ -57,7 +57,7 @@ def get_bookings_by_user_id(
     if bookings.first() == None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Booking with id: {id} does not exist.",
+            detail=f"User:{id} has no bookings.",
         )
     return bookings
 

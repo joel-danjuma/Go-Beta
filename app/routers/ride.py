@@ -17,19 +17,28 @@ def get_rides(
     return rides
 
 
-# get available rides
-@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.Ride])
+# get all rides for origin
+@router.get("/origin", status_code=status.HTTP_200_OK, response_model=List[schemas.Ride])
+def get_ride_by_origin(origin : str, db:Session = Depends(get_db)):
+    rides = crud.get_ride_by_origin(origin, db)
+    return rides
+
+#get all rides for destination
+@router.get("/destination", status_code=status.HTTP_200_OK, response_model=List[schemas.Ride])
+def get_ride_by_destination(destination : str, db:Session = Depends(get_db)):
+    rides = crud.get_ride_by_destination(destination, db)
+    return rides
 
 # get one ride by id
 @router.get("/{id}", response_model=schemas.Ride)
 def get_ride_by_id(id: int, db: Session = Depends(get_db)):
-    ride = crud.get_ride_by_id(id, db)
-    if not ride.first():
+    ride = crud.get_ride_by_id(id, db).first()
+    if not ride:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"ride with id: {id} was not found.",
         )
-    return ride.first()
+    return ride
 
 
 # create a new ride
