@@ -116,6 +116,12 @@ def create_ride(ride: schemas.CreateRide, id: int, db: Session):
     return new_ride
 
 
+def delete_ride(ride_id: int, db: Session):
+    db.query(models.Ride).filter(models.Ride.id == ride_id).delete()
+    db.commit()
+    return "Ride deleted successfully"
+
+
 def get_all_rides(db: Session):
     return db.query(models.Ride).all()
 
@@ -125,4 +131,4 @@ def get_ride_by_id(ride_id: int, db: Session):
 
 
 def get_ride_by_provider_id(provider_id: int, db: Session):
-    return db.query(models.Ride).filter(models.Ride.provider_id == provider_id)
+    return db.query(models.Ride).filter(models.Ride.provider_id == provider_id).all()

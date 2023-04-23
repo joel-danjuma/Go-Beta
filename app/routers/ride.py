@@ -17,6 +17,9 @@ def get_rides(
     return rides
 
 
+# get available rides
+@router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.Ride])
+
 # get one ride by id
 @router.get("/{id}", response_model=schemas.Ride)
 def get_ride_by_id(id: int, db: Session = Depends(get_db)):
@@ -48,8 +51,8 @@ def create_ride(
 
 # update a ride
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED, response_model=schemas.Ride)
-def update_ride(id: int, ride: schemas.CreateRide, db: Session = Depends(get_db)):
-    db_ride = crud.get_ride_by_id(id, db)
+def update_ride(ride: schemas.Ride, db: Session = Depends(get_db)):
+    db_ride = crud.get_ride_by_id(ride.id, db)
     if not db_ride:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -62,28 +65,13 @@ def update_ride(id: int, ride: schemas.CreateRide, db: Session = Depends(get_db)
 # delete a ride
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_ride(id: int, db: Session = Depends(get_db)):
-    db_ride = crud.get_ride_by_id(id, db)
+    db_ride = crud.get_ride_by_id(id, db).first()
     if not db_ride:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"ride with id: {id} was not found.",
         )
     crud.delete_ride(id, db)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-# get all rides for a user
-@router.get(
-    "/user/{id}", status_code=status.HTTP_200_OK, response_model=List[schemas.Ride]
-)
-def get_rides_by_user_id(id: int, db: Session = Depends(get_db)):
-    rides = crud.get_rides_by_user_id(id, db)
-    if not rides:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"rides for user with id: {id} were not found.",
-        )
-    return rides
 
 
 # get all rides for a provider
@@ -91,7 +79,7 @@ def get_rides_by_user_id(id: int, db: Session = Depends(get_db)):
     "/provider/{id}", status_code=status.HTTP_200_OK, response_model=List[schemas.Ride]
 )
 def get_rides_by_provider_id(id: int, db: Session = Depends(get_db)):
-    rides = crud.get_rides_by_provider_id(id, db)
+    rides = crud.get_ride_by_provider_id(id, db)
     if not rides:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
